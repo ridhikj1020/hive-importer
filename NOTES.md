@@ -32,7 +32,13 @@ from the export itself.
 - Database on real Postgres (PGlite): import atomic, edits survive close and reopen, copy is
   independent in both directions and after deleting the original.
 
-Not yet checked: FILL IN once the app is deployed (live URL, real Supabase, `next build`).
+- The whole app end to end: built with `next build`, run with `next start` against Postgres over the
+  real wire protocol, and driven with a headless browser: upload, import report, deep link from a
+  report issue to the comment, rename a section, edit comment text with bold, copy, edit the copy,
+  original unchanged, reset to exported text. Two bugs found that way and fixed (a driver that
+  double-encoded the JSON payload, and one connection per bundle).
+
+Not yet checked: FILL IN once deployed (live URL, real Supabase, the Vercel build).
 
 ## The hard part
 
@@ -46,11 +52,21 @@ XML entities exactly once.
 
 ## What I cut and why
 
-So far (confirm or change): FILL IN
+Confirm or change each of these, they are what the app does today:
 - No model in the import path. The format is structured, so a deterministic parser can be proven
   correct. A model could invent or drop content, and I would have to build a second checker for it.
 - No login. One seeded workspace, so a reviewer lands on an imported template.
-- No drag-to-reorder, no template-level settings, no photo storage.
+- No drag-to-reorder, no adding or deleting sections, items or comments, and choice lists are shown
+  but not editable. The brief asks for names and comment text, so that is what saves.
+- No template-level settings and no photo storage (photos are kept as references only).
+- No login, so anyone with the URL can write. The seeded example cannot be deleted, copies can.
+
+## The improvement I chose
+
+Import report ("did my content survive?"). FILL IN in your own words: the customer has tuned this for
+four years and will not retype it, so before trusting a new system they need to see what came across
+and what did not. The report answers that with checks they can read, and every issue links back to the
+comment it is about.
 
 ## Time spent
 
